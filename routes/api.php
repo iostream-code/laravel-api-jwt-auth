@@ -26,12 +26,16 @@ Route::post('/login', LoginController::class)->name('login');
 Route::middleware(['auth:api'])->group(function () {
 
     Route::post('/logout', LogoutController::class);
+    Route::get('/users', [UserController::class, 'index']);
 
     Route::middleware(['role:ADMIN'])->group(function () {
-        Route::apiResource('/user', UserController::class);
+        Route::post('/user', [UserController::class, 'store']);
+        Route::get('/user/{user}', [UserController::class, 'show']);
+        Route::patch('/user/{user}', [UserController::class, 'update']);
+        Route::delete('/user/{user}', [UserController::class, 'destroy']);
     });
 
     Route::middleware(['role:USER'])->group(function () {
-        Route::get('/users', [UserController::class, 'index']);
+        // route for role USER
     });
 });
